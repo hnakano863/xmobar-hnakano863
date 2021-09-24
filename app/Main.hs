@@ -1,5 +1,6 @@
 module Main where
 
+import Data.Default
 import Xmobar
 import XMonad.Hooks.DynamicLog (xmobarColor, wrap)
 
@@ -21,8 +22,8 @@ myConfig
   { overrideRedirect = False
   , font = defaultFont
   , additionalFonts = myAdditionalFonts
-  , bgColor = "#FFFFFF"
-  , fgColor = "#F8F8F2"
+  , bgColor = backgroundColor def
+  , fgColor = fontColor def
   , alpha = 255
   , position = TopSize L 100 26
   , sepChar = "%"
@@ -40,13 +41,20 @@ myCommands =
   ]
 
 myDate :: Runnable
-myDate = Run $ Date dateModuleFormat "date" 150
-
-dateModuleFormat :: String
-dateModuleFormat = boxWrap $ xmobarColor "#F8F8F2" "" fmt
+myDate = Run $ Date fmt "date" 150
   where
-    fmt = xmobarColor "#F8F8F2" "#282A36:0" dateText
-    dateText = fn 1 "\xe939" ++ " %H:%M"
+    fmt = elipseBox def $ fn 1 "\xe939" ++ " %H:%M"
+
+data Palette = Palette { fontColor :: String
+                       , boxColor :: String
+                       , backgroundColor :: String
+                       }
+
+instance Default Palette where
+  def = Palette { fontColor = "#F8F8F2"
+                , boxColor  = "#282A36"
+                , backgroundColor = "#FFFFFF"
+                }
 
 -- フォントを指定する関数
 fn :: Int -> String -> String
@@ -55,11 +63,21 @@ fn i = wrap open close
     open = "<fn=" ++ show i ++ ">"
     close = "</fn>"
 
-boxLeftChar :: String
-boxLeftChar = xmobarColor "#282A36" "" $ fn 2 " \xe0b6"
+-- 四角の形にラップする
+boxWrap :: Palette -> String -> String
+boxWrap p = xmobarColor fc bgc
+  where
+    fc = fontColor p
+    bgc = boxColor p ++ ":0"
 
-boxRightChar :: String
-boxRightChar = xmobarColor "#282A36" "" $ fn 2 "\xe0b4 "
+-- 楕円形のボックスにする
+elipseBox :: Palette -> String -> String
+elipseBox p = elipseWrap p . boxWrap p
 
-boxWrap :: String -> String
-boxWrap = wrap boxLeftChar boxRightChar
+-- 楕円形にラップする
+elipseWrap :: Palette -> String -> String
+elipseWrap p = wrap left right
+  where
+    c = boxColor p
+    left  = xmobarColor c "" $ fn 2 " \xe0b6"
+    right = xmobarColor c "" $ fn 2 "\xe0b4 "

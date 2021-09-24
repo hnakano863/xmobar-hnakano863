@@ -37,6 +37,7 @@ executable xmobar-hnakano863
     -- other-extensions:
     build-depends:
         base ^>=4.14.1.0,
+        data-default ^>=0.7.1.1,
         xmobar ^>=0.37,
         xmonad-contrib ^>=0.16
     hs-source-dirs:   app
