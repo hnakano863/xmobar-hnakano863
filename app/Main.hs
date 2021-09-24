@@ -1,4 +1,6 @@
 module Main where
 
+import Xmobar (xmobar, defaultConfig)
+
 main :: IO ()
-main = putStrLn "Hello, Haskell!"
+main = xmobar defaultConfig

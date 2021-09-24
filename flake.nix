@@ -11,9 +11,15 @@
       systems = remove "aarch64-darwin" defaultSystems;
     in
       eachSystem systems (system:
-        let pkgs = nixpkgs.legacyPackages."${system}"; in
+        let
+          pkgs = nixpkgs.legacyPackages."${system}";
+          compilerVersion = "ghc8104";
+          compiler = pkgs.haskell.packages."${compilerVersion}";
+        in
         {
-          devShell = import ./shell.nix { inherit pkgs; };
+          defaultPackage = compiler.callPackage ./default.nix { };
+
+          devShell = import ./shell.nix { inherit pkgs compilerVersion; };
         }
       );
 }
