@@ -33,11 +33,12 @@ myConfig
   }
 
 myTemplate :: String
-myTemplate = "} %date% {"
+myTemplate = "} %date% { %memory% "
 
 myCommands :: [Runnable]
 myCommands =
   [ myDate
+  , myMem
   ]
 
 myDate :: Runnable
@@ -45,15 +46,27 @@ myDate = Run $ Date fmt "date" 150
   where
     fmt = elipseBox def $ fn 1 "\xe939" ++ " %H:%M"
 
+myMem :: Runnable
+myMem = Run $ Memory args 10
+  where
+    args = [ "--template"
+           , memicon ++ ratio
+           ]
+    ratio = boxWrap def "<usedratio>%"
+    memicon =  boxWrap p " \xF2DB "
+    p = def{fontColor = yellowClr def}
+
 data Palette = Palette { fontColor :: String
                        , boxColor :: String
                        , backgroundColor :: String
+                       , yellowClr :: String
                        }
 
 instance Default Palette where
   def = Palette { fontColor = "#F8F8F2"
                 , boxColor  = "#282A36"
                 , backgroundColor = "#FFFFFF"
+                , yellowClr = "#F4F99D"
                 }
 
 -- フォントを指定する関数
