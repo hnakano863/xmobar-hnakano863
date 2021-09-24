@@ -5,6 +5,7 @@ mkShell {
 
   buildInputs = [
     ghc
+    ghcid
     cabal-install
   ];
 
