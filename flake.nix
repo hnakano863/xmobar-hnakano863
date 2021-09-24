@@ -7,19 +7,23 @@
   outputs = { self, nixpkgs, flake-utils }:
     let
       inherit (flake-utils.lib) defaultSystems eachSystem;
-      remove = e: builtins.filter (x: x != e);
-      systems = remove "aarch64-darwin" defaultSystems;
+      inherit (builtins) elem filter;
+      systems = filter (x: !elem x ["aarch64-darwin" "x86_64-darwin"]) defaultSystems;
     in
       eachSystem systems (system:
         let
           pkgs = nixpkgs.legacyPackages."${system}";
           compilerVersion = "ghc8104";
           compiler = pkgs.haskell.packages."${compilerVersion}";
+          drv = compiler.callPackage ./default.nix { };
         in
         {
-          defaultPackage = compiler.callPackage ./default.nix { };
+          defaultPackage = drv;
 
-          devShell = import ./shell.nix { inherit pkgs compilerVersion; };
+          devShell = import ./shell.nix {
+            inherit pkgs compiler;
+            haskellDepends = drv.getCabalDeps.executableHaskellDepends;
+          };
         }
       );
 }

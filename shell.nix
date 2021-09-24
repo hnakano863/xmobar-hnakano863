@@ -1,14 +1,16 @@
-{ pkgs ? import <nixpkgs> {}, compilerVersion ? "ghc8104" }:
+{ pkgs ? import <nixpkgs> {}
+, haskellDepends ? []
+, compiler
+}:
+
 with pkgs;
+
 let
-  compiler = haskell.packages."${compilerVersion}".ghcWithPackages (ps: with ps; [
-    xmobar
-    xmonad-contrib
-  ]);
+  ghcEnv = compiler.ghcWithPackages (ps: haskellDepends);
 in mkShell {
 
   buildInputs = [
-    compiler
+    ghcEnv
     ghcid
     cabal-install
     cabal2nix
