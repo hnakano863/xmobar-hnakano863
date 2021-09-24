@@ -1,6 +1,7 @@
 module Main where
 
 import Xmobar
+import XMonad.Hooks.DynamicLog (xmobarColor, wrap)
 
 main :: IO ()
 main = xmobar myConfig
@@ -42,4 +43,23 @@ myDate :: Runnable
 myDate = Run $ Date dateModuleFormat "date" 150
 
 dateModuleFormat :: String
-dateModuleFormat = "<fn=1>\xe939</fn> %H:%M"
+dateModuleFormat = boxWrap $ xmobarColor "#F8F8F2" "" fmt
+  where
+    fmt = xmobarColor "#F8F8F2" "#282A36:0" dateText
+    dateText = fn 1 "\xe939" ++ " %H:%M"
+
+-- フォントを指定する関数
+fn :: Int -> String -> String
+fn i = wrap open close
+  where
+    open = "<fn=" ++ show i ++ ">"
+    close = "</fn>"
+
+boxLeftChar :: String
+boxLeftChar = xmobarColor "#282A36" "" $ fn 2 " \xe0b6"
+
+boxRightChar :: String
+boxRightChar = xmobarColor "#282A36" "" $ fn 2 "\xe0b4 "
+
+boxWrap :: String -> String
+boxWrap = wrap boxLeftChar boxRightChar
