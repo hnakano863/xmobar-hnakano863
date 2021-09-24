@@ -3,6 +3,7 @@ with pkgs;
 let
   compiler = haskell.packages."${compilerVersion}".ghcWithPackages (ps: with ps; [
     xmobar
+    xmonad-contrib
   ]);
 in mkShell {
 
