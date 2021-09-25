@@ -41,7 +41,7 @@ memory = Run $ Memory args 10
       ]
 
 battery :: Runnable
-battery = Run $ Battery args 600
+battery = Run $ Battery args 150
   where
     args = [ "-t", "<acstatus><left>"
            , "-H", "95", "-L", "15"
@@ -52,7 +52,6 @@ battery = Run $ Battery args 600
            , "-i", defclr green $ fn 1 "\xe91d"
            , "-o", defclr green $ fn 1 "\xe91c"
            , "-f", "AC0"
-           , "--lows", defclr red $ fn 1 "\xe91c"
            ]
 
 
