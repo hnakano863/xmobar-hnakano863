@@ -33,7 +33,7 @@ myConfig
   }
 
 myTemplate :: String
-myTemplate = "} %date% { %memory% %battery%"
+myTemplate = "} %date% { %memory%%battery%"
 
 myCommands :: [Runnable]
 myCommands =
@@ -60,12 +60,25 @@ myMem = Run $ Memory args 10
 myBat :: Runnable
 myBat = Run $ Battery args 600
   where
-    args = [ "-t", boxWrap def "Batt: <left>%" ]
+    args = [ "-t", boxWrap def "<acstatus> <left>%"
+           , "-H", "95", "-L", "15"
+           , "-h", greenClr def
+           , "-l", redClr def
+           , "-p", "3"
+           , "--"
+           , "-O", boxWrap (def{fontColor = greenClr def}) $ fn 1 "\xe91d"
+           , "-i", boxWrap (def{fontColor = greenClr def}) $ fn 1 "\xe91d"
+           , "-o", boxWrap (def{fontColor = greenClr def}) $ fn 1 "\xe91c"
+           , "-f", "AC0"
+           , "--lows", boxWrap (def{fontColor = redClr def}) $ fn 1 "\xe91c"
+           ]
 
 data Palette = Palette { fontColor :: String
                        , boxColor :: String
                        , backgroundColor :: String
                        , yellowClr :: String
+                       , greenClr :: String
+                       , redClr :: String
                        }
 
 instance Default Palette where
@@ -73,6 +86,8 @@ instance Default Palette where
                 , boxColor  = "#282A36"
                 , backgroundColor = "#FFFFFF"
                 , yellowClr = "#F4F99D"
+                , greenClr = "#50FA7B"
+                , redClr = "#FF5555"
                 }
 
 -- フォントを指定する関数
