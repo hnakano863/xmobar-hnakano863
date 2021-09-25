@@ -33,12 +33,13 @@ myConfig
   }
 
 myTemplate :: String
-myTemplate = "} %date% { %memory% "
+myTemplate = "} %date% { %memory% %battery%"
 
 myCommands :: [Runnable]
 myCommands =
   [ myDate
   , myMem
+  , myBat
   ]
 
 myDate :: Runnable
@@ -55,6 +56,11 @@ myMem = Run $ Memory args 10
     ratio = boxWrap def "<usedratio>%"
     memicon =  boxWrap p " \xF2DB "
     p = def{fontColor = yellowClr def}
+
+myBat :: Runnable
+myBat = Run $ Battery args 600
+  where
+    args = []
 
 data Palette = Palette { fontColor :: String
                        , boxColor :: String
