@@ -60,7 +60,7 @@ myMem = Run $ Memory args 10
 myBat :: Runnable
 myBat = Run $ Battery args 600
   where
-    args = [ "-t", boxWrap p "Batt: <left>%" ]
+    args = [ "-t", boxWrap def "Batt: <left>%" ]
 
 data Palette = Palette { fontColor :: String
                        , boxColor :: String
