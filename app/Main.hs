@@ -35,7 +35,7 @@ memory :: Runnable
 memory = Run $ Memory args 10
   where
     args =
-      [ "-t", defclr yellow "\xF2DB" ++ "<usedratio>"
+      [ "-t", defclr yellow "\xF2DB " ++ "<usedratio>"
       , "-H", "75", "-h", red def
       , "-p", "3", "-S", "On"
       ]
