@@ -20,8 +20,8 @@ myConfig
   , position = TopSize L 100 26
   , sepChar = "%"
   , alignSep = "}{"
-  , commands = [mydate, cpu,  memory, alsa, battery, wlan]
-  , template = "} %date% {| %cpu%  %memory% | %alsa:default:Master%  %wlp2s0wi% | %battery%"
+  , commands = [mydate, cpu,  memory, alsa, battery, wlan, Run XMonadLog]
+  , template = "%XMonadLog%|} %date% {| %cpu%  %memory% | %alsa:default:Master%  %wlp2s0wi% | %battery%"
   }
 
 
